@@ -1,10 +1,10 @@
 import React from 'react';
-import Article from './components/Article';
+import Homepage from './components/Homepage';
 
 function App() {
   return (
     <div>
-      <Article />
+      <Homepage />
     </div>
   );
 }

@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+/* Base styles using pure CSS instead of old @apply directives */
+body {
+  background-color: white;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.section-label {
+  display: inline-block;
+  background-color: #0063B1; /* bbc-blue */
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
