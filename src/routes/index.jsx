@@ -4,7 +4,9 @@ import App from '../App.jsx';
 import ArticlePage from './ArticlePage.jsx';
 import Homepage from '../components/Homepage.jsx';
 import NotFound from './NotFound.jsx';
-import EditorLogin from './EditorLogin.jsx'; // ← IMPORTED NEW ROUTE
+import EditorLogin from './EditorLogin.jsx';
+import EditorDashboard from './EditorDashboard.jsx';
+import NewArticle from './NewArticle.jsx'; // ← IMPORTED THE COMPONENT
 
 export const router = createBrowserRouter([
   {
@@ -21,8 +23,16 @@ export const router = createBrowserRouter([
         element: <ArticlePage />
       },
       {
-        path: 'editor/login', // ← REGISTERED NEW VIEW ROUTE HERE
+        path: 'editor/login',
         element: <EditorLogin />
+      },
+      {
+        path: 'editor/dashboard',
+        element: <EditorDashboard />
+      },
+      {
+        path: 'editor/articles/new', // ← HOOKED UP DYNAMIC PATHWAY
+        element: <NewArticle />
       },
       {
         path: '*',

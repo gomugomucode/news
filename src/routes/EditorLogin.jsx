@@ -17,26 +17,31 @@ export default function EditorLogin() {
 
     try {
       await login(email, password);
+      // Redirect cleanly to your new client-side dashboard path on success
       navigate('/editor/dashboard');
     } catch (err) {
-      setError(err.message || 'Invalid credentials provided');
+      setError('Invalid email or password credentials.');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white border border-gray-100 shadow-md rounded-2xl p-8">
-        <h2 className="text-2xl font-black text-center text-gray-900 tracking-tight uppercase mb-6">
-          📰 News Portal Editor
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-sm space-y-6 p-8 bg-white rounded-2xl border border-gray-100 shadow-md">
+        <h2 className="text-2xl font-black text-center text-[#0063B1] tracking-tight uppercase">
+          News Portal Editor
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-black uppercase text-gray-500 mb-1">Email Address</label>
+            <label htmlFor="email" className="block text-xs font-black uppercase text-gray-500 mb-1">
+              Email Address
+            </label>
             <input
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -46,9 +51,12 @@ export default function EditorLogin() {
           </div>
 
           <div>
-            <label className="block text-xs font-black uppercase text-gray-500 mb-1">Password</label>
+            <label htmlFor="password" className="block text-xs font-black uppercase text-gray-500 mb-1">
+              Password
+            </label>
             <input
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -59,21 +67,23 @@ export default function EditorLogin() {
 
           {error && (
             <div className="bg-red-50 border-l-4 border-[#BB1919] text-[#BB1919] text-xs font-bold p-3 rounded-r">
-              ⚠️ {error}
+               {error}
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#0063B1] hover:bg-[#0063B1]/90 text-white font-bold text-sm py-2.5 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+            className="w-full bg-[#0063B1] hover:bg-[#0063B1]/90 text-white font-bold text-sm py-2.5 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
           >
-            {loading ? 'Authenticating Session...' : 'Sign In To Dashboard'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
           <p className="text-center text-xs text-gray-400 pt-2 leading-relaxed">
             Demo credentials:<br/>
-            <code className="bg-gray-100 px-1 text-gray-600 font-bold rounded">editor@newsportal.com</code> / <code className="bg-gray-100 px-1 text-gray-600 font-bold rounded">password123</code>
+            <code className="bg-gray-100 px-1 text-gray-600 font-mono font-bold rounded">
+              editor@newsportal.com / password123
+            </code>
           </p>
         </form>
       </div>
