@@ -52,3 +52,21 @@ h2 {
   top: 0;
   outline: 2px solid #0063B1;
 }
+
+/* Respect Users with Vestibular Motion Sensitivities */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Completely disable our flashing or sliding UI animations */
+  .animate-pulse, 
+  .animate-ping, 
+  .animate-bounce {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
