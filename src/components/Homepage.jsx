@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx'; // ← IMPORTED SECURITY INTERCEPTOR HOOKS
 import HeroCard from './cards/HeroCard';
 import StandardCard from './cards/StandardCard';
 import CompactCard from './cards/CompactCard';
 import PublishingWorkflow from './PublishingWorkflow';
 import LiveBlogCounter from './LiveBlogCounter';
 import { getHomepageContent } from '../services/mockApi';
-import { useDebounce } from '../hooks/useDebounce'; // ← ADDED DEBOUNCE HOOK IMPORT
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function Homepage() {
   const { activeCategory, searchQuery } = useOutletContext();
+  const { isEditor } = useAuth(); // ← GATHERED PERMISSION ROLES
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // TASK IMPLEMENTATION: Debounce the search input string for 300ms to block excessive calculation thrashing
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const loadPortalData = useCallback(async () => {
@@ -59,31 +60,21 @@ export default function Homepage() {
     );
   }
 
-  // COMPREHENSIVE FILTER PIPELINE: Handles category tabs AND text query keyword matches simultaneously
   const filterArticlesPipeline = (art) => {
     if (!art) return false;
-    
-    // 1. Evaluate Category Tab Match
     const matchesCategory = activeCategory === 'all' || art.section?.label?.toLowerCase() === activeCategory?.toLowerCase();
-    
-    // 2. Evaluate Debounced Text Input Match (searches across headlines and blurbs)
     const cleanQuery = debouncedSearchQuery?.toLowerCase().trim();
-    const matchesSearch = !cleanQuery || 
-      art.headline?.toLowerCase().includes(cleanQuery) || 
-      art.standfirst?.toLowerCase().includes(cleanQuery);
-
+    const matchesSearch = !cleanQuery || art.headline?.toLowerCase().includes(cleanQuery) || art.standfirst?.toLowerCase().includes(cleanQuery);
     return matchesCategory && matchesSearch;
   };
 
   const displayTopStories = content.topStories?.filter(filterArticlesPipeline) || [];
   const displaySideArticles = content.sideArticles?.filter(filterArticlesPipeline) || [];
   const isHeroVisible = filterArticlesPipeline(content.heroArticle);
-
   const hasAnyStories = isHeroVisible || displayTopStories.length > 0 || displaySideArticles.length > 0;
 
   return (
     <div className="pb-12">
-      {/* BREAKING NEWS AND TIMESTAMP INDICATOR HEADER STRIP */}
       {content.breakingNews && (
         <div className="bg-[#BB1919] text-white px-4 py-2 text-sm font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-xs">
           <div className="animate-pulse">
@@ -95,30 +86,24 @@ export default function Homepage() {
         </div>
       )}
 
-      {/* SEARCH AND FILTER CONTEXT BAR FEEDBACK ELEMENT */}
       {debouncedSearchQuery && (
         <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-xs font-medium text-gray-500">
-          Showing filtered results for: <span className="font-bold text-gray-900">"{debouncedSearchQuery}"</span> inside category <span className="font-bold text-gray-900">"{activeCategory.toUpperCase()}"</span>
+          Showing filtered results for: <span className="font-bold text-gray-900">"{debouncedSearchQuery}"</span>
         </div>
       )}
 
-      {/* MAIN CONTENT DISPLAY GRID */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
-        
         {!hasAnyStories ? (
           <div className="text-center py-20 bg-white border border-gray-100 rounded-2xl shadow-2xs">
-            <p className="text-gray-400 text-sm font-medium italic">No news articles matched your search query criteria.</p>
+            <p className="text-gray-400 text-sm font-medium italic">No news articles matched your search criteria.</p>
           </div>
         ) : (
           <>
-            {/* TIER 2 DISPLAY CARDS LAYER */}
             <div className="grid gap-8 lg:grid-cols-[2fr_1fr] border-b border-gray-200 pb-8">
-              {/* LEFT HERO BOX */}
               <div className={`bg-white p-4 rounded-xl border border-gray-100 shadow-xs ${!isHeroVisible ? 'hidden lg:block lg:opacity-10 lg:pointer-events-none' : ''}`}>
-                {isHeroVisible ? <HeroCard article={content.heroArticle} /> : <div className="text-center py-20 text-gray-300 italic text-xs">Lead story hidden by search filter</div>}
+                {isHeroVisible ? <HeroCard article={content.heroArticle} /> : <div className="text-center py-20 text-gray-300 italic text-xs">Lead story hidden</div>}
               </div>
 
-              {/* RIGHT SIDEBAR COMPACT MOST-READ INDEX */}
               <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-xs">
                 <h2 className="text-base font-black text-gray-900 border-b-2 border-[#BB1919] pb-1.5 mb-2 tracking-wider uppercase">
                   Most Read Stories
@@ -131,11 +116,10 @@ export default function Homepage() {
               </div>
             </div>
 
-            {/* TIER 3: GRID LAYOUT FEED CONTAINER BLOCKS */}
             {(displayTopStories.length > 0 || displaySideArticles.length > 0) && (
               <div className="mt-10 border-b border-gray-200 pb-8">
                 <h2 className="text-xl font-black text-gray-900 mb-6 tracking-tight uppercase border-b-2 border-[#0063B1] pb-1 inline-block">
-                  Filtered Stories Feed
+                  Portal Stories Feed
                 </h2>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {displayTopStories.map((article) => (
@@ -154,7 +138,6 @@ export default function Homepage() {
           </>
         )}
 
-        {/* REAL-TIME DYNAMIC BLOG TRACKING MODULE */}
         <div className="mt-12 bg-white p-6 rounded-2xl border border-gray-100 shadow-xs">
           <h2 className="text-lg font-black text-gray-900 mb-4 tracking-tight uppercase flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-[#BB1919] rounded-full animate-ping"></span>
@@ -165,10 +148,12 @@ export default function Homepage() {
           </div>
         </div>
 
-        {/* EDITORIAL ADMIN PUBLISHING LIFECYCLE PANEL */}
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <PublishingWorkflow />
-        </div>
+        {/* DAY 8 SECURITY WALL INTRODUCED BELOW: HIDDEN UNLESS STAFF AUTHENTICATED */}
+        {isEditor && (
+          <div className="mt-12 border-t border-gray-200 pt-8 animate-fadeIn">
+            <PublishingWorkflow />
+          </div>
+        )}
 
       </main>
     </div>

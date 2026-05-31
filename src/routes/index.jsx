@@ -4,6 +4,7 @@ import App from '../App.jsx';
 import ArticlePage from './ArticlePage.jsx';
 import Homepage from '../components/Homepage.jsx';
 import NotFound from './NotFound.jsx';
+import EditorLogin from './EditorLogin.jsx'; // ← IMPORTED NEW ROUTE
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: 'news/:section/:slug',
         element: <ArticlePage />
+      },
+      {
+        path: 'editor/login', // ← REGISTERED NEW VIEW ROUTE HERE
+        element: <EditorLogin />
       },
       {
         path: '*',
