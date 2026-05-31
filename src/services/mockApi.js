@@ -1,4 +1,4 @@
-// In-memory runtime persistence dictionary and cache maps
+// In-memory runtime persistence database container arrays
 let localDatabaseInstance = null;
 const articleCache = {};
 
@@ -6,10 +6,9 @@ const articleCache = {};
 export const getHomepageContent = async () => {
   if (localDatabaseInstance) return localDatabaseInstance;
 
-  await new Promise(resolve => setTimeout(resolve, 50));
+  await new Promise(resolve => setTimeout(resolve, 100));
   const fetchedTimeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-  // FIXED: Switched to ultra-reliable, high-availability, direct pixel placeholders
   const placeholderA = "https://picsum.photos";
   const placeholderB = "https://picsum.photos";
   const placeholderC = "https://picsum.photos";
@@ -25,7 +24,7 @@ export const getHomepageContent = async () => {
       headline: 'Quantum Computing Breakthrough Promises Revolution in Drug Discovery',
       slug: 'quantum-computing-breakthrough-drug-discovery',
       standfirst: 'Researchers demonstrate error-corrected quantum bits operating at 99.9% fidelity limits.',
-      heroMedia: { url: placeholderA, alt: 'Quantum lab data visualization asset' },
+      heroMedia: { url: placeholderA },
       metadata: { author: { name: 'Dr. Elena Rodriguez' }, published: '2 hours ago' }
     },
     sideArticles: [
@@ -35,7 +34,7 @@ export const getHomepageContent = async () => {
         section: { label: 'world' },
         headline: 'Global Climate Summit Reaches Historic Agreement',
         slug: 'global-climate-summit-historic-agreement',
-        heroMedia: { url: placeholderB, alt: 'Planet earth climate array data setting' },
+        heroMedia: { url: placeholderB },
         metadata: { author: { name: 'James Wilson' }, published: '5 hours ago' }
       }
     ],
@@ -47,7 +46,7 @@ export const getHomepageContent = async () => {
         section: { label: 'science' },
         headline: 'New Telescope Reveals Distant Galaxy Formation',
         slug: 'new-telescope-reveals-galaxy-formation',
-        heroMedia: { url: placeholderC, alt: 'Deep space abstract cosmic vector background' },
+        heroMedia: { url: placeholderC },
         metadata: { author: { name: 'Sarah Chen' }, published: '1 day ago' }
       },
       {
@@ -56,7 +55,7 @@ export const getHomepageContent = async () => {
         section: { label: 'sport' },
         headline: 'Local Team Secures Playoff Spot in Overtime Victory',
         slug: 'local-team-secures-playoff-spot',
-        heroMedia: { url: placeholderD, alt: 'Active sports stadium floodlight setup' },
+        heroMedia: { url: placeholderD },
         metadata: { author: { name: 'Alex Mercer' }, published: '6 hours ago' }
       }
     ]
@@ -65,33 +64,39 @@ export const getHomepageContent = async () => {
   return localDatabaseInstance;
 };
 
-// PREFETCH CACHE MANAGER
-export const prefetchArticleBySlug = async (slug) => {
-  if (articleCache[slug]) return;
+// EDITOR SELECTION FEED FUNCTIONS
+export const getArticles = async (filter = 'all') => {
   const allContent = await getHomepageContent();
-  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.trendingStories, ...allContent.topStories];
-  const article = allArticles.find(a => a.slug === slug);
-  if (article) articleCache[slug] = article;
+  let allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.topStories];
+  if (filter !== 'all') allArticles = allArticles.filter(article => article.status === filter);
+  return allArticles;
 };
 
-// CHANNELS DETAILS ACQUISITION FETCH ENGINE
-export const getArticleBySlug = async (section, slug) => {
-  if (articleCache[slug]) return articleCache[slug];
-  const db = await getHomepageContent();
-  const all = [db.heroArticle, ...db.sideArticles, ...db.topStories];
-  return all.find(a => a.slug === slug) || db.heroArticle;
+export const getArticleById = async (id) => {
+  const allContent = await getHomepageContent();
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.topStories];
+  return allArticles.find(article => article.id === id) || null;
 };
 
-// COMPOSITION MUTATION SAVE CONTROL FLOW
+// FIXED: RESTORED THE HELPER EXPORT THAT WAS CRASHING PUBLISHINGWORKFLOW
+export const getArticlesByStatus = async (status) => {
+  const allContent = await getHomepageContent();
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.topStories];
+  return allArticles.filter(article => article.status === status);
+};
+
+// SAVE COMPOSITION MUTATION MUTATOR
 export const saveArticle = async (articleData) => {
+  await new Promise(resolve => setTimeout(resolve, 400));
   const db = await getHomepageContent();
-  const slugified = articleData.headline.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  
+  const generatedSlug = articleData.headline.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
   const formattedRecord = {
     ...articleData,
-    id: articleData.id || `art-${Date.now()}`,
-    slug: slugified,
-    metadata: { author: { name: 'Editor Jane' }, published: 'Just now' }
+    id: articleData.id || `article-${Date.now()}`,
+    slug: generatedSlug,
+    metadata: { author: { name: 'Editor Jane' }, published: 'Just now' },
+    heroMedia: { url: "https://picsum.photos" }
   };
 
   if (formattedRecord.id === 'hero-1') {
@@ -99,17 +104,25 @@ export const saveArticle = async (articleData) => {
   } else {
     db.topStories = [formattedRecord, ...db.topStories.filter(a => a.id !== formattedRecord.id)];
   }
-
   return formattedRecord;
 };
 
-export const getArticlesByStatus = async (status) => {
+// OPTIMIZATION SILENT CACHE CORES
+export const prefetchArticleBySlug = async (slug) => {
+  if (articleCache[slug]) return;
   const allContent = await getHomepageContent();
-  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.trendingStories, ...allContent.topStories];
-  return allArticles.filter(article => article.status === status);
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.topStories];
+  const article = allArticles.find(a => a.slug === slug);
+  if (article) articleCache[slug] = article;
 };
 
-// LIVE POLL RESPONSES
-export const getLiveBlogUpdates = async (lastUpdateTime) => {
+export const getArticleBySlug = async (section, slug) => {
+  if (articleCache[slug]) return articleCache[slug];
+  const db = await getHomepageContent();
+  const all = [db.heroArticle, ...db.sideArticles, ...db.topStories];
+  return all.find(a => a.slug === slug) || db.heroArticle;
+};
+
+export const getLiveBlogUpdates = async () => {
   return { hasNewUpdates: false, newPosts: [] };
 };

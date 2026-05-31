@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50/30 flex flex-col font-sans antialiased text-gray-900">
-      {/* BRAND HEADER INJECTED WITH QUERY CONTROLS */}
+      {/* GLOBAL DISPATCH NAV BAR HEADER */}
       <Header 
         activeCategory={activeCategory} 
         setActiveCategory={setActiveCategory} 
@@ -24,6 +24,7 @@ function App() {
         setSearchQuery={setSearchQuery}
       />
 
+      {/* ANIMATION LIFECYCLE PRESENCE OBJECT */}
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -33,7 +34,7 @@ function App() {
           variants={fadePageVariants}
           className="flex-grow flex flex-col"
         >
-          {/* Distribute text parameters down down safely via router context grids */}
+          {/* Outlet safely routes our protected views */}
           <Outlet context={{ activeCategory, setActiveCategory, searchQuery }} />
         </motion.div>
       </AnimatePresence>

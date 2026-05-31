@@ -6,7 +6,8 @@ import Homepage from '../components/Homepage.jsx';
 import NotFound from './NotFound.jsx';
 import EditorLogin from './EditorLogin.jsx';
 import EditorDashboard from './EditorDashboard.jsx';
-import NewArticle from './NewArticle.jsx'; // ← IMPORTED THE COMPONENT
+import NewArticle from './NewArticle.jsx';
+import ProtectedRoute from '../components/ProtectedRoute.jsx'; // ← IMPORTED ACCENT GUARD
 
 export const router = createBrowserRouter([
   {
@@ -28,11 +29,21 @@ export const router = createBrowserRouter([
       },
       {
         path: 'editor/dashboard',
-        element: <EditorDashboard />
+        element: (
+          // PROTECTED WORKSPACE FIREWALL LAYER
+          <ProtectedRoute>
+            <EditorDashboard />
+          </ProtectedRoute>
+        )
       },
       {
-        path: 'editor/articles/new', // ← HOOKED UP DYNAMIC PATHWAY
-        element: <NewArticle />
+        path: 'editor/articles/new',
+        element: (
+          // PROTECTED WORKSPACE FIREWALL LAYER
+          <ProtectedRoute>
+            <NewArticle />
+          </ProtectedRoute>
+        )
       },
       {
         path: '*',
