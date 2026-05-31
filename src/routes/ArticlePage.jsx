@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getHomepageContent } from '../services/mockApi';
 import Seo from '../components/Seo.jsx';
-import RelatedArticles from '../components/RelatedArticles.jsx'; // ← INJECTED SUGGESTION FILTER
+import RelatedArticles from '../components/RelatedArticles.jsx';
+import CommentSection from '../components/CommentSection.jsx'; // ← IMPORTED COMMENT TRACK MODULE
 
 export default function ArticlePage() {
   const { section, slug } = useParams();
@@ -123,11 +124,14 @@ export default function ArticlePage() {
           </footer>
         </article>
 
-        {/* DAY 7 EXTENSION MODULE: INJECT RELATED ARCHITECTURES BELOW FOOTER UTILITIES */}
+        {/* RELATED ARTICLES TRAY CAROUSEL CONTAINER */}
         <RelatedArticles 
           currentArticleId={article.id} 
           currentSection={article.section?.label} 
         />
+
+        {/* WEEK 2 COMPONENT EXTENSION: INJECTED LIVE DISCUSSION CHANNEL LAYER HERE */}
+        <CommentSection articleId={article.id} />
       </div>
     </>
   );
