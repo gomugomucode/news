@@ -1,42 +1,39 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { prefetchArticleBySlug } from '../../services/mockApi';
 
 export default function StandardCard({ article, showBadge = false }) {
+  if (!article) return null;
+  const sectionLabel = article.section?.label?.toLowerCase() || 'news';
+  const properSlug = article.slug || 'article';
+
   return (
-    <div className="flex flex-col sm:flex-row items-start gap-4">
-      {/* FIXED SIZE IMAGE SIDE CONTAINER WITH POSITIONING FOR LIVE BADGE */}
-      <div className="relative flex-shrink-0 w-full sm:w-[320px] h-[180px]">
-        <img
-          src={article.heroMedia?.url || 'https://unsplash.com'}
-          alt={article.heroMedia?.alt || ''}
-          className="w-full h-full object-cover rounded"
-        />
-        {/* OPTIONAL BADGE */}
-        {showBadge && (
-          <div className="absolute top-2 left-2 bg-[#BB1919] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm tracking-wider shadow-sm">
-            LIVE
+    <Link 
+      to={`/news/${sectionLabel}/${properSlug}`} 
+      onMouseEnter={() => prefetchArticleBySlug(properSlug)} // ← TRIPPED SILENT PREFETCH HERE
+      className="group block outline-none focus:ring-2 focus:ring-[#0063B1] rounded-lg p-2 transition-all"
+    >
+      <div className="flex flex-col sm:flex-row items-start gap-4">
+        {article.heroMedia && (
+          <div className="relative flex-shrink-0 w-full sm:w-[200px] h-[112px] bg-gray-900 rounded overflow-hidden">
+            <img src={article.heroMedia.url} alt="" className="w-full h-full object-cover" />
+            {showBadge && (
+              <div className="absolute top-2 left-2 bg-[#BB1919] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-xs uppercase tracking-wider">
+                LIVE
+              </div>
+            )}
           </div>
         )}
-      </div>
-
-      {/* TEXT CONTENT WRAPPER */}
-      <div className="flex-1">
-        <div className="mb-1">
-          <span className="inline-block bg-[#0063B1]/10 text-[#0063B1] text-[11px] font-bold px-2 py-0.5 rounded">
+        <div className="flex-1">
+          <span className="text-[10px] font-black text-[#0063B1] tracking-wider uppercase block mb-0.5">
             {article.section?.label || 'NEWS'}
           </span>
-        </div>
-        <h3 className="text-[18px] md:text-[20px] font-bold text-gray-900 leading-snug mb-1 line-clamp-2 hover:text-[#0063B1] cursor-pointer transition-colors">
-          {article.headline}
-        </h3>
-        <p className="text-[14px] md:text-[15px] text-[#3F3F42] line-clamp-2 leading-relaxed">
-          {article.body?.[0]?.text || article.standfirst || ''}
-        </p>
-        <div className="mt-2 flex items-center gap-2 text-[12px] text-gray-500 font-medium">
-          {article.metadata?.author?.name && <span>By {article.metadata.author.name}</span>}
-          {article.metadata?.author?.name && <span className="text-gray-300">•</span>}
-          <span>{article.metadata?.published || 'Just now'}</span>
+          <h3 className="text-base font-bold text-gray-900 leading-snug mb-1 group-hover:text-[#0063B1] transition-colors line-clamp-2">
+            {article.headline}
+          </h3>
+          <span className="text-[11px] text-gray-400 font-medium">{article.metadata?.published || 'Recently'}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

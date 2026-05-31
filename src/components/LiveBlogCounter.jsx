@@ -46,14 +46,12 @@ export default function LiveBlogCounter({ liveBlogId }) {
       aria-label="Live blog updates"
       className="bg-white border border-gray-100 rounded-xl shadow-xs overflow-hidden"
     >
-      {/* DYNAMIC SCREEN READER AUDIO ACCESSIBILITY INTERCEPT HOOK */}
       {updateCount > 0 && (
         <div className="sr-only" aria-live="assertive">
           Notice: {updateCount} new coverage update posts are available in the live tracking feed.
         </div>
       )}
 
-      {/* HEADER NAVIGATION STRIP */}
       <div className="p-4 bg-[#0063B1]/5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100">
         <div className="flex items-center gap-3">
           <div 
@@ -86,7 +84,7 @@ export default function LiveBlogCounter({ liveBlogId }) {
             onClick={() => setIsPaused(!isPaused)}
             className="text-[11px] font-bold px-2 py-1 rounded border bg-white border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer transition-colors"
           >
-            {isPaused ? '▶ Resume' : '专 Pause'}
+            {isPaused ? '▶ Resume' : '⏸ Pause'}
           </button>
 
           <button
@@ -107,8 +105,9 @@ export default function LiveBlogCounter({ liveBlogId }) {
 
           <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
             {livePosts.length > 0 ? (
-              livePosts.map((post) => (
-                <div key={post.id} className="p-3 bg-red-50/20 border-l-4 border-[#BB1919] rounded-r-lg transition-all">
+              // FIXED: Added combined uniquely identifying suffix strings to key values below
+              livePosts.map((post, index) => (
+                <div key={`${post.id}-${index}-${Math.random()}`} className="p-3 bg-red-50/20 border-l-4 border-[#BB1919] rounded-r-lg transition-all">
                   <div className="flex justify-between items-start gap-2 mb-1">
                     <span className="text-[10px] font-black text-[#BB1919] tracking-wider uppercase bg-red-100/50 px-1.5 py-0.5 rounded">
                       UPDATE POST
@@ -118,7 +117,7 @@ export default function LiveBlogCounter({ liveBlogId }) {
                     </span>
                   </div>
                   <p className="text-xs font-bold text-gray-900 leading-relaxed">
-                    {post.body[0]?.text || 'Incoming field transmission text...'}
+                    {post.body?.text || 'Incoming field transmission text...'}
                   </p>
                 </div>
               ))

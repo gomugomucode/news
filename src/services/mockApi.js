@@ -1,9 +1,15 @@
+// In-memory data cache dictionary to store prefetched articles
+const articleCache = {};
+
 // Simulates fetching from a real CMS like Sanity.io
 export const getHomepageContent = async () => {
-  // Simulated network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
+  await new Promise(resolve => setTimeout(resolve, 300));
   const fetchedTimeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  const placeholderA = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='800' height='450' viewBox='0 0 800 450'><rect width='100%' height='100%' fill='%231f2937'/><text x='50%' y='50%' font-family='sans-serif' font-size='24' font-weight='bold' fill='%239ca3af' dominant-baseline='middle' text-anchor='middle'>LEAD IMAGE</text></svg>";
+  const placeholderB = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='800' height='450' viewBox='0 0 800 450'><rect width='100%' height='100%' fill='%23374151'/><text x='50%' y='50%' font-family='sans-serif' font-size='24' font-weight='bold' fill='%239ca3af' dominant-baseline='middle' text-anchor='middle'>WORLD MATTERS</text></svg>";
+  const placeholderC = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='800' height='450' viewBox='0 0 800 450'><rect width='100%' height='100%' fill='%234b5563'/><text x='50%' y='50%' font-family='sans-serif' font-size='24' font-weight='bold' fill='%239ca3af' dominant-baseline='middle' text-anchor='middle'>COSMIC TELEMETRY</text></svg>";
+  const placeholderD = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='800' height='450' viewBox='0 0 800 450'><rect width='100%' height='100%' fill='%23111827'/><text x='50%' y='50%' font-family='sans-serif' font-size='24' font-weight='bold' fill='%239ca3af' dominant-baseline='middle' text-anchor='middle'>ARENA HIGHLIGHTS</text></svg>";
 
   return {
     lastUpdated: fetchedTimeString,
@@ -13,88 +19,92 @@ export const getHomepageContent = async () => {
     },
     heroArticle: {
       id: 'hero-1',
-      status: 'published', // draft | in_review | approved | scheduled | published | archived
-      isBreaking: false,
-      isScheduled: false,
-      scheduledFor: null,
-      section: { label: 'TECHNOLOGY', url: '/tech' },
+      status: 'published',
+      section: { label: 'technology', url: '/tech' },
       headline: 'Quantum Computing Breakthrough Promises Revolution in Drug Discovery',
+      slug: 'quantum-computing-breakthrough-drug-discovery',
       standfirst: 'Researchers demonstrate error-corrected quantum bits operating at 99.9% fidelity limits.',
-      heroMedia: {
-        url: 'https://unsplash.com',
-        alt: 'Scientist in quantum lab'
-      },
-      metadata: {
-        author: { name: 'Dr. Elena Rodriguez' },
-        published: '2 hours ago'
-      }
+      heroMedia: { url: placeholderA, alt: 'Quantum lab setup visualization' },
+      metadata: { author: { name: 'Dr. Elena Rodriguez' }, published: '2 hours ago' },
+      topics: [{ label: 'Quantum Computing' }, { label: 'Drug Discovery' }]
     },
     sideArticles: [
       {
         id: 'side-1',
         status: 'published',
-        isBreaking: false,
-        isScheduled: false,
-        section: { label: 'WORLD', url: '/world' },
+        section: { label: 'world', url: '/world' },
         headline: 'Global Climate Summit Reaches Historic Agreement',
-        metadata: { author: { name: 'James Wilson' }, published: '5 hours ago' }
-      },
-      {
-        id: 'side-2',
-        status: 'in_review', // Populates the "In Review" dashboard stage
-        isBreaking: false,
-        isScheduled: false,
-        section: { label: 'SPORT', url: '/sport' },
-        headline: 'Local Team Secures Playoff Spot in Overtime Victory',
-        metadata: { author: { name: 'Alex Mercer' }, published: '6 hours ago' }
+        slug: 'global-climate-summit-historic-agreement',
+        heroMedia: { url: placeholderB, alt: 'Planet earth climate setting' },
+        metadata: { author: { name: 'James Wilson' }, published: '5 hours ago' },
+        topics: [{ label: 'Environment' }, { label: 'Global Policy' }]
       }
     ],
     trendingStories: [
-      { id: 'tr-1', status: 'published', section: { label: 'BUSINESS' }, headline: 'Tech Giant Announces Major $10B Infrastructure Investment Fund', metadata: { published: '20m ago' } }
+      { 
+        id: 'tr-1', 
+        status: 'published', 
+        section: { label: 'business' }, 
+        headline: 'Tech Giant Announces Major $10B Infrastructure Investment Fund', 
+        slug: 'tech-giant-announces-10b-ai-investment',
+        metadata: { published: '20m ago' }, 
+        topics: [{ label: 'Finance' }] 
+      }
     ],
     topStories: [
       {
         id: 'top-1',
         status: 'published',
-        section: { label: 'SCIENCE', url: '/science' },
+        section: { label: 'science', url: '/science' },
         headline: 'New Telescope Reveals Distant Galaxy Formation',
-        heroMedia: { url: 'https://unsplash.com' },
-        metadata: { author: { name: 'Sarah Chen' }, published: '1 day ago' }
+        slug: 'new-telescope-reveals-galaxy-formation',
+        heroMedia: { url: placeholderC, alt: 'Deep space cosmic array' },
+        metadata: { author: { name: 'Sarah Chen' }, published: '1 day ago' },
+        topics: [{ label: 'Space' }, { label: 'Cosmology' }]
       },
       {
         id: 'top-2',
-        status: 'draft', // Populates the "Draft" dashboard stage
-        section: { label: 'HEALTH', url: '/health' },
-        headline: 'Breakthrough Therapeutic Trials Show Promise for Cognitive Restoration',
-        heroMedia: { url: 'https://unsplash.com' },
-        metadata: { author: { name: 'Marcus Vance' }, published: 'Drafting' }
+        status: 'published',
+        section: { label: 'sport', url: '/sport' },
+        headline: 'Local Team Secures Playoff Spot in Overtime Victory',
+        slug: 'local-team-secures-playoff-spot',
+        heroMedia: { url: placeholderD, alt: 'Stadium lights setup' },
+        metadata: { author: { name: 'Alex Mercer' }, published: '6 hours ago' },
+        topics: [{ label: 'Football' }, { label: 'Playoffs' }]
       }
     ]
   };
 };
 
-// HELPER FILTER QUERY LOOP
-export const getArticlesByStatus = async (status) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
+// PREFETCH DISPATCH ENGINE: Pre-loads data silently into the cache map
+export const prefetchArticleBySlug = async (slug) => {
+  if (articleCache[slug]) return;
   const allContent = await getHomepageContent();
-  
-  const allArticles = [
-    allContent.heroArticle,
-    ...allContent.sideArticles,
-    ...allContent.trendingStories,
-    ...allContent.topStories
-  ];
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.trendingStories, ...allContent.topStories];
+  const article = allArticles.find(a => a.slug === slug);
+  if (article) articleCache[slug] = article;
+};
 
+// FETCH CORE: Prioritizes pulling instantly from cache before triggering a loading lag state
+export const getArticleBySlug = async (section, slug) => {
+  if (articleCache[slug]) return articleCache[slug];
+  await new Promise(resolve => setTimeout(resolve, 400));
+  const allContent = await getHomepageContent();
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.trendingStories, ...allContent.topStories];
+  return allArticles.find(a => a.slug === slug) || allContent.heroArticle;
+};
+
+// WORKFLOW GETTER HELPER
+export const getArticlesByStatus = async (status) => {
+  const allContent = await getHomepageContent();
+  const allArticles = [allContent.heroArticle, ...allContent.sideArticles, ...allContent.trendingStories, ...allContent.topStories];
   return allArticles.filter(article => article.status === status);
 };
 
-// REAL-TIME SERVICE ELEMENT: Simulates message queue polling fallback
+// FIXED: RESTORED LIVE UPDATES FOR POLLED BLOCKS
 export const getLiveBlogUpdates = async (lastUpdateTime) => {
-  // Simulate standard network round-trip delay latency
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Randomly generate 0 to 3 new updates on this interval cycle
-  const newUpdates = Math.floor(Math.random() * 4);
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const newUpdates = Math.floor(Math.random() * 3); // Returns 0 to 2 new updates randomly
 
   return {
     hasNewUpdates: newUpdates > 0,
@@ -102,16 +112,9 @@ export const getLiveBlogUpdates = async (lastUpdateTime) => {
     timestamp: Date.now(),
     newPosts: Array.from({ length: newUpdates }, (_, i) => ({
       id: `live-${Date.now()}-${i}`,
-      body: [
-        {
-          type: 'paragraph',
-          text: `Live update ${i + 1}: Breaking dynamic detail parsed from ongoing coverage channels.`
-        }
-      ],
-      publishedAt: Date.now() - (Math.random() * 300000),
-      metadata: {
-        author: { name: 'Live Blog Editor' },
-        published: 'just now'
+      publishedAt: Date.now(),
+      body: {
+        text: `Live update ${i + 1}: Dynamic broadcast development updated from field correspondents.`
       }
     }))
   };

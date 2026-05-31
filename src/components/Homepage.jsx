@@ -73,7 +73,7 @@ export default function Homepage() {
       )}
 
       {/* FIXED ID BOUNDARY TAG ADDED TO MAIN OBJECT BELOW FOR KEYBOARD ACCESSIBILITY SKIP ROUTING */}
-      <main id="main-content" tabindex="-1" className="container mx-auto px-4 py-8 max-w-7xl outline-none">
+      <main id="main-content" tabIndex="-1" className="container mx-auto px-4 py-8 max-w-7xl outline-none">
         
         {/* TIER 2: PRIMARY LEAD + SIDE TRENDING STACK */}
         <div className="grid gap-8 lg:grid-cols-[2fr_1fr] border-b border-gray-200 pb-8">
