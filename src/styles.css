@@ -32,3 +32,23 @@ h2 {
   border-radius: 4px;
   margin-bottom: 16px;
 }
+
+/* Skip Link Accessibility Styles */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 9999;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #0063B1;
+}

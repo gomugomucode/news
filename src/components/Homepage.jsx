@@ -72,8 +72,8 @@ export default function Homepage() {
         </div>
       )}
 
-      {/* MAIN LAYOUT DISPLAY MODULES */}
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* FIXED ID BOUNDARY TAG ADDED TO MAIN OBJECT BELOW FOR KEYBOARD ACCESSIBILITY SKIP ROUTING */}
+      <main id="main-content" tabindex="-1" className="container mx-auto px-4 py-8 max-w-7xl outline-none">
         
         {/* TIER 2: PRIMARY LEAD + SIDE TRENDING STACK */}
         <div className="grid gap-8 lg:grid-cols-[2fr_1fr] border-b border-gray-200 pb-8">
@@ -131,10 +131,8 @@ export default function Homepage() {
           </h2>
           
           <div className="space-y-4">
-            {/* Real-time Polling Stream Counter Component */}
             <LiveBlogCounter liveBlogId="ongoing-event-1" />
 
-            {/* Simulated historical timeline posts feed */}
             <div className="space-y-3">
               <div className="p-4 bg-gray-50 border-l-4 border-[#0063B1] rounded-r-lg">
                 <div className="flex items-start gap-3">
@@ -142,16 +140,6 @@ export default function Homepage() {
                   <div>
                     <p className="text-sm font-bold text-gray-900 mb-0.5">Major technical breakthrough verified across clean-rooms</p>
                     <p className="text-[11px] text-gray-400 font-medium">Just now • Live Blog Editor</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 bg-gray-50 border-l-4 border-[#0063B1] rounded-r-lg">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-[#BB1919] rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900 mb-0.5">Global engineering taskforce establishes communication guidelines</p>
-                    <p className="text-[11px] text-gray-400 font-medium">12 mins ago • Live Blog Editor</p>
                   </div>
                 </div>
               </div>
