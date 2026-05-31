@@ -87,3 +87,32 @@ export const getArticlesByStatus = async (status) => {
 
   return allArticles.filter(article => article.status === status);
 };
+
+// REAL-TIME SERVICE ELEMENT: Simulates message queue polling fallback
+export const getLiveBlogUpdates = async (lastUpdateTime) => {
+  // Simulate standard network round-trip delay latency
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // Randomly generate 0 to 3 new updates on this interval cycle
+  const newUpdates = Math.floor(Math.random() * 4);
+
+  return {
+    hasNewUpdates: newUpdates > 0,
+    updateCount: newUpdates,
+    timestamp: Date.now(),
+    newPosts: Array.from({ length: newUpdates }, (_, i) => ({
+      id: `live-${Date.now()}-${i}`,
+      body: [
+        {
+          type: 'paragraph',
+          text: `Live update ${i + 1}: Breaking dynamic detail parsed from ongoing coverage channels.`
+        }
+      ],
+      publishedAt: Date.now() - (Math.random() * 300000),
+      metadata: {
+        author: { name: 'Live Blog Editor' },
+        published: 'just now'
+      }
+    }))
+  };
+};

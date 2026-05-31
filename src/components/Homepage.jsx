@@ -3,6 +3,7 @@ import HeroCard from './cards/HeroCard';
 import StandardCard from './cards/StandardCard';
 import CompactCard from './cards/CompactCard';
 import PublishingWorkflow from './PublishingWorkflow';
+import LiveBlogCounter from './LiveBlogCounter';
 import { getHomepageContent } from '../services/mockApi';
 
 export default function Homepage() {
@@ -104,7 +105,7 @@ export default function Homepage() {
         </div>
 
         {/* TIER 3: EDITORIAL FEED LISTINGS */}
-        <div className="mt-10">
+        <div className="mt-10 border-b border-gray-200 pb-8">
           <h2 className="text-xl font-black text-gray-900 mb-6 tracking-tight uppercase border-b-2 border-[#0063B1] pb-1 inline-block">
             Top Global Stories
           </h2>
@@ -122,7 +123,43 @@ export default function Homepage() {
           </div>
         </div>
 
-        {/* DAY 5 UPDATE: INJECT EDITORIAL WORKFLOW PANEL RIGHT INTO HOME GRID */}
+        {/* LIVE BLOG SECTION */}
+        <div className="mt-12 bg-white p-6 rounded-2xl border border-gray-100 shadow-xs">
+          <h2 className="text-lg font-black text-gray-900 mb-4 tracking-tight uppercase flex items-center gap-2">
+            <span className="w-2.5 h-2.5 bg-[#BB1919] rounded-full animate-ping"></span>
+            Live Deployment Track: Global Tech Infrastructure Accord
+          </h2>
+          
+          <div className="space-y-4">
+            {/* Real-time Polling Stream Counter Component */}
+            <LiveBlogCounter liveBlogId="ongoing-event-1" />
+
+            {/* Simulated historical timeline posts feed */}
+            <div className="space-y-3">
+              <div className="p-4 bg-gray-50 border-l-4 border-[#0063B1] rounded-r-lg">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-[#BB1919] rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-900 mb-0.5">Major technical breakthrough verified across clean-rooms</p>
+                    <p className="text-[11px] text-gray-400 font-medium">Just now • Live Blog Editor</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-gray-50 border-l-4 border-[#0063B1] rounded-r-lg">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-[#BB1919] rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-900 mb-0.5">Global engineering taskforce establishes communication guidelines</p>
+                    <p className="text-[11px] text-gray-400 font-medium">12 mins ago • Live Blog Editor</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* EDITORIAL WORKFLOW PANEL */}
         <div className="mt-12 border-t border-gray-200 pt-8">
           <PublishingWorkflow />
         </div>
