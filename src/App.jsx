@@ -5,9 +5,9 @@ import Header from './components/Header.jsx';
 
 function App() {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
-  // Animation configuration settings presets
   const fadePageVariants = {
     initial: { opacity: 0, y: 8 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeOut' } },
@@ -16,10 +16,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50/30 flex flex-col font-sans antialiased text-gray-900">
-      {/* GLOBAL BRAND HEADER AND INJECTED TAB STATE SELECTION */}
-      <Header activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+      {/* BRAND HEADER INJECTED WITH QUERY CONTROLS */}
+      <Header 
+        activeCategory={activeCategory} 
+        setActiveCategory={setActiveCategory} 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
 
-      {/* HARDWARE ACCELERATED FRAME SYSTEM WRAPPER VIEW CONTAINER */}
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -29,8 +33,8 @@ function App() {
           variants={fadePageVariants}
           className="flex-grow flex flex-col"
         >
-          {/* Passes context flags down cleanly via modern React Router context utilities */}
-          <Outlet context={{ activeCategory, setActiveCategory }} />
+          {/* Distribute text parameters down down safely via router context grids */}
+          <Outlet context={{ activeCategory, setActiveCategory, searchQuery }} />
         </motion.div>
       </AnimatePresence>
     </div>
